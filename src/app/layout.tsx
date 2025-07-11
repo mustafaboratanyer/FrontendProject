@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { TohumProvider } from "./context/TohumContext";
 
 export const metadata: Metadata = {
   title: "My App",
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <TohumProvider>
+          {children}
+        </TohumProvider>
       </body>
     </html>
   );

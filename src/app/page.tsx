@@ -1,14 +1,19 @@
 'use client';
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useTohumContext } from "./context/TohumContext";
 import styles from "./Home.module.css";
 
 export default function HomePage() {
   const [currentUser, setCurrentUser] = useState(null);
-  const [balance, setBalance] = useState(100);
   const [seeds, setSeeds] = useState<number[]>([]);
   const [seedStages, setSeedStages] = useState<{[key: number]: string}>({});
+  const [seedTypes, setSeedTypes] = useState<{[key: number]: 'basic' | 'premium'}>({});
+  const [selectedSeedType, setSelectedSeedType] = useState<'basic' | 'premium'>('basic');
   const router = useRouter();
+  
+  const { balance, basicSeeds, premiumSeeds, setBalance, setBasicSeeds, setPremiumSeeds } = useTohumContext();
 
   useEffect(() => {
     const user = localStorage.getItem("currentUser");
@@ -24,18 +29,55 @@ export default function HomePage() {
     router.push("/signin");
   };
 
-  const handleSquareClick = (index: number) => {
+  const goToStore = () => {
+    router.push("/store");
+  };
 
-    if (!seeds.includes(index) && balance >= 10) {
-      setSeeds([...seeds, index]);
-      setBalance(balance - 10);
-      growSeed(index);
+  const getSeedImage = (stage: string, isBasic: boolean) => {
+    if (isBasic) {
+
+        switch(stage) {
+        case 'T': return '/Seeding.png'; 
+        case 'F': return '/LittlePlant.png'; 
+        case 'B': return '/MiddlePlant.png'; 
+        case 'Ç': return '/Daisy.png';
+        case 'K': return '/DriedDaisy.png'; 
+      }
+    } else {
+
+        switch(stage) {
+        case 'T': return '/Seeding.png'; 
+        case 'F': return '/LittlePlant.png';
+        case 'B': return '/MiddlePlant.png';
+        case 'Ç': return '/Tulip.png'; 
+        case 'K': return '/DriedTulip.png'; 
+      }
     }
+  };
 
+  const handleSquareClick = (index: number) => {
+    if (!seeds.includes(index)) {
+
+        if (selectedSeedType === 'basic' && basicSeeds > 0) {
+        setSeeds([...seeds, index]);
+        setBasicSeeds(basicSeeds - 1);
+        setSeedTypes(prev => ({...prev, [index]: 'basic'}));
+        growSeed(index);
+      } else if (selectedSeedType === 'premium' && premiumSeeds > 0) {
+        setSeeds([...seeds, index]);
+        setPremiumSeeds(premiumSeeds - 1);
+        setSeedTypes(prev => ({...prev, [index]: 'premium'}));
+        growSeed(index);
+      } else {
+        alert("Seçtiğin tohum türünden yok!");
+      }
+    }
     else if (seeds.includes(index)) {
 
         if (seedStages[index] === 'Ç') {
-        setBalance(balance + 10);
+        const isBasic = seedTypes[index] === 'basic';
+        const harvestReward = isBasic ? 20 : 40; 
+        setBalance(balance + harvestReward);
       }
       
       setSeeds(seeds.filter(s => s !== index));
@@ -44,11 +86,15 @@ export default function HomePage() {
         delete newStages[index];
         return newStages;
       });
+      setSeedTypes(prev => {
+        const newTypes = {...prev};
+        delete newTypes[index];
+        return newTypes;
+      });
     }
   };
 
   const growSeed = (index: number) => {
-
     setSeedStages(prev => ({...prev, [index]: 'T'}));
     
     setTimeout(() => {
@@ -69,7 +115,7 @@ export default function HomePage() {
   };
 
   if (!currentUser) {
-    return <div>Yükleniyor...</div>;
+    return <div>Yükleniyor</div>;
   }
 
   return (
@@ -77,11 +123,35 @@ export default function HomePage() {
       <div className={styles.header}>
         <div className={styles.gameInfo}>
           <span className={styles.balance}>Balance: {balance}</span>
+          <span className={styles.inventory}>Temel: {basicSeeds} | Premium: {premiumSeeds}</span>
         </div>
         <h1>Tohum Dikme Oyunu</h1>
-        <button className={styles.logoutButton} onClick={handleLogout}>
-          Çıkış Yap
-        </button>
+        <div className={styles.headerButtons}>
+          <button className={styles.storeButton} onClick={goToStore}>
+            Store
+          </button>
+          <button className={styles.logoutButton} onClick={handleLogout}>
+            Çıkış Yap
+          </button>
+        </div>
+      </div>
+      
+      <div className={styles.seedSelector}>
+        <h3>Tohum Seç:</h3>
+        <div className={styles.seedOptions}>
+          <button 
+            className={`${styles.seedOption} ${selectedSeedType === 'basic' ? styles.selected : ''}`}
+            onClick={() => setSelectedSeedType('basic')}
+          >
+            Temel Tohum ({basicSeeds})
+          </button>
+          <button 
+            className={`${styles.seedOption} ${selectedSeedType === 'premium' ? styles.selected : ''}`}
+            onClick={() => setSelectedSeedType('premium')}
+          >
+            Premium Tohum ({premiumSeeds})
+          </button>
+        </div>
       </div>
       
       <div className={styles.gameArea}>
@@ -93,8 +163,14 @@ export default function HomePage() {
               onClick={() => handleSquareClick(index)}
             >
               {seeds.includes(index) && (
-                <div className={styles.seed}>
-                  {seedStages[index] || 'T'}
+                <div className={`${styles.seed} ${seedTypes[index] === 'premium' ? styles.premiumSeed : ''}`}>
+                  <Image 
+                    src={getSeedImage(seedStages[index] || 'T', seedTypes[index] === 'basic')} 
+                    alt={`${seedTypes[index] === 'basic' ? 'Basic' : 'Premium'} Seed Stage ${seedStages[index] || 'T'}`}
+                    width={40}
+                    height={40}
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               )}
             </div>
