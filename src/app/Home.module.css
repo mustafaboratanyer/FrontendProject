@@ -22,6 +22,17 @@
   backdrop-filter: blur(10px);
 }
 
+.gameInfo {
+  display: flex;
+  gap: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.balance {
+  color: #fbbf24;
+}
+
 .logoutButton {
   background: #ef4444;
   color: white;

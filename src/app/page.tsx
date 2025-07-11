@@ -5,6 +5,7 @@ import styles from "./Home.module.css";
 
 export default function HomePage() {
   const [currentUser, setCurrentUser] = useState(null);
+  const [balance, setBalance] = useState(100);
   const [seeds, setSeeds] = useState<number[]>([]);
   const [seedStages, setSeedStages] = useState<{[key: number]: string}>({});
   const router = useRouter();
@@ -25,12 +26,18 @@ export default function HomePage() {
 
   const handleSquareClick = (index: number) => {
 
-    if (!seeds.includes(index)) {
+    if (!seeds.includes(index) && balance >= 10) {
       setSeeds([...seeds, index]);
+      setBalance(balance - 10);
       growSeed(index);
     }
 
     else if (seeds.includes(index)) {
+
+        if (seedStages[index] === 'Ç') {
+        setBalance(balance + 10);
+      }
+      
       setSeeds(seeds.filter(s => s !== index));
       setSeedStages(prev => {
         const newStages = {...prev};
@@ -68,6 +75,9 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
+        <div className={styles.gameInfo}>
+          <span className={styles.balance}>Balance: {balance}</span>
+        </div>
         <h1>Tohum Dikme Oyunu</h1>
         <button className={styles.logoutButton} onClick={handleLogout}>
           Çıkış Yap
