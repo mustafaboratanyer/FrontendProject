@@ -5,6 +5,8 @@ import styles from "./Home.module.css";
 
 export default function HomePage() {
   const [currentUser, setCurrentUser] = useState(null);
+  const [seeds, setSeeds] = useState<number[]>([]);
+  const [seedStages, setSeedStages] = useState<{[key: number]: string}>({});
   const router = useRouter();
 
   useEffect(() => {
@@ -19,6 +21,44 @@ export default function HomePage() {
   const handleLogout = () => {
     localStorage.removeItem("currentUser");
     router.push("/signin");
+  };
+
+  const handleSquareClick = (index: number) => {
+
+    if (!seeds.includes(index)) {
+      setSeeds([...seeds, index]);
+      growSeed(index);
+    }
+
+    else if (seeds.includes(index)) {
+      setSeeds(seeds.filter(s => s !== index));
+      setSeedStages(prev => {
+        const newStages = {...prev};
+        delete newStages[index];
+        return newStages;
+      });
+    }
+  };
+
+  const growSeed = (index: number) => {
+
+    setSeedStages(prev => ({...prev, [index]: 'T'}));
+    
+    setTimeout(() => {
+      setSeedStages(prev => ({...prev, [index]: 'F'}));
+    }, 2000);
+    
+    setTimeout(() => {
+      setSeedStages(prev => ({...prev, [index]: 'B'}));
+    }, 4000);
+    
+    setTimeout(() => {
+      setSeedStages(prev => ({...prev, [index]: 'Ç'}));
+    }, 6000);
+    
+    setTimeout(() => {
+      setSeedStages(prev => ({...prev, [index]: 'K'}));
+    }, 10000);
   };
 
   if (!currentUser) {
@@ -40,7 +80,13 @@ export default function HomePage() {
             <div 
               key={index} 
               className={styles.square}
+              onClick={() => handleSquareClick(index)}
             >
+              {seeds.includes(index) && (
+                <div className={styles.seed}>
+                  {seedStages[index] || 'T'}
+                </div>
+              )}
             </div>
           ))}
         </div>

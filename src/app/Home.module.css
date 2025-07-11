@@ -1,11 +1,11 @@
 .container {
   min-height: 100vh;
-  background: white;
+  background: #1e3a8a;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  color: black;
+  color: white;
   font-family: Arial, sans-serif;
 }
 
@@ -80,16 +80,46 @@
   transform: scale(1.05);
 }
 
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-  
-  .square {
-    width: 70px;
-    height: 70px;
-    font-size: 14px;
-  }
+.square.selected {
+  background: rgba(59, 130, 246, 0.5);
+  border-color: #3b82f6;
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.seed {
+  font-size: 40px;
+  font-weight: bold;
+  color: #fbbf24;
+  transition: all 0.3s ease;
+}
+
+.controls {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.controlButton {
+  background: rgba(34, 197, 94, 0.8);
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.controlButton:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 1);
+  transform: translateY(-2px);
+}
+
+.controlButton:disabled {
+  background: rgba(107, 114, 128, 0.5);
+  cursor: not-allowed;
 }
