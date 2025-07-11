@@ -1,0 +1,95 @@
+.container {
+  min-height: 100vh;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  color: black;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+}
+
+.logoutButton {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.logoutButton:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+}
+
+.square {
+  width: 100px;
+  height: 100px;
+  background: #8B4513;
+  border: 2px solid #654321;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 18px;
+  font-weight: bold;
+  position: relative;
+  color: white;
+}
+
+.square:hover {
+  background: #A0522D;
+  border-color: #8B4513;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .square {
+    width: 70px;
+    height: 70px;
+    font-size: 14px;
+  }
+}

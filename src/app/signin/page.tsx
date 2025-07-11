@@ -1,17 +1,20 @@
 'use client';
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./SignIn.module.css";
 
 export default function SignInPage() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   function handleSignIn(e: React.FormEvent) {
     e.preventDefault();
     const users = JSON.parse(localStorage.getItem("users") || "[]");
     const found = users.find((user: {name: string, password: string}) => user.name === name && user.password === password);
     if (found) {
-      alert("Giriş başarılı!");
+      localStorage.setItem("currentUser", JSON.stringify(found));
+      router.push("/");
     } else {
       alert("Kullanıcı adı veya şifre yanlış!");
     }
