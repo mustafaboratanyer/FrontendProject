@@ -33,7 +33,7 @@ export const TohumProvider = ({ children }: { children: ReactNode }) => {
       setBalance(balance - 20);
       setPremiumSeeds(premiumSeeds + 1);
     } else {
-      alert("Paran yetrli değil!");
+      alert("Paran yeterli değil!");
     }
   };
 

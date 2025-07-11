@@ -33,7 +33,7 @@ export default function HomePage() {
     router.push("/store");
   };
 
-  const getSeedImage = (stage: string, isBasic: boolean) => {
+  const getSeedImage = (stage: string , isBasic: boolean) => {
     if (isBasic) {
 
         switch(stage) {
@@ -164,13 +164,12 @@ export default function HomePage() {
             >
               {seeds.includes(index) && (
                 <div className={`${styles.seed} ${seedTypes[index] === 'premium' ? styles.premiumSeed : ''}`}>
-                  <Image 
-                    src={getSeedImage(seedStages[index] || 'T', seedTypes[index] === 'basic')} 
+                  <Image
+                    src={getSeedImage(seedStages[index] || 'T', seedTypes[index] === 'basic') || '/default-seed.png'}
                     alt={`${seedTypes[index] === 'basic' ? 'Basic' : 'Premium'} Seed Stage ${seedStages[index] || 'T'}`}
                     width={40}
                     height={40}
-                    style={{ objectFit: 'contain' }}
-                  />
+                    />
                 </div>
               )}
             </div>
