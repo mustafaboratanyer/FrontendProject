@@ -125,7 +125,7 @@ export default function HomePage() {
           <span className={styles.balance}>Balance: {balance}</span>
           <span className={styles.inventory}>Temel: {basicSeeds} | Premium: {premiumSeeds}</span>
         </div>
-        <h1>Tohum Dikme Oyunu</h1>
+        <h1>BERİL SENİ ÇOOK SEVİİYORUUUM</h1>
         <div className={styles.headerButtons}>
           <button className={styles.storeButton} onClick={goToStore}>
             Store
